@@ -8,6 +8,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
+                sh 'ls -alh'
                 sh 'cd service'
                 sh 'echo "Building image..."'
                 sh 'docker-compose up -d'
