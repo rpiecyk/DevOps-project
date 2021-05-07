@@ -1,0 +1,11 @@
+version: "3.8"
+
+services:
+  100-jokes-service:
+    build: 
+      context: .
+      dockerfile: dockerize/dockerfile
+    image: 100jokes-service:latest
+    container_name: 100jokes-service
+    ports:
+      - "8090:5000"
