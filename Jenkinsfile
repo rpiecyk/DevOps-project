@@ -3,14 +3,17 @@ pipeline {
 
     environment {
         SVC = 'pl.org.bash.100jokes'
+        CODE_DIR = 'service'
     }
 
     stages {
         stage('Build') {
             steps {
                 sh 'echo "Building image..."'
-                sh 'cd service && docker-compose up -d'
-                sh 'ls -alh && docker-compose down'
+                dir('${env.CODE_DIR}') {
+                  sh 'docker-compose up -d'
+                  sh 'docker-compose down'
+                }
                 sh 'echo "Image built"'
             }
         }
@@ -21,7 +24,9 @@ pipeline {
         }
         stage('Code quality') {
             steps {
-                sh 'ls -alh"'
+                dir('${env.CODE_DIR}') {
+                  sh 'echo "code quality check"'
+                }
             }
         }
         stage('Package') {
