@@ -8,46 +8,56 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'cd service'
                 sh 'echo "Building image..."'
-                sh 'docker-compose up -d'
-                sh 'docker-compose down'
+                dir("service") {
+                  echo 'it is service dir'
+                  sh 'pwd'
+                  sh 'docker-compose up -d'
+                  sh 'docker-compose down'
+                }
                 sh 'echo "Image built"'
             }
         }
         stage('Test') {
             steps {
-                sh 'echo "unit test"'
+                sh 'echo "unit test stage"'
             }
         }
         stage('Code quality') {
             steps {
-                sh 'ls -alh"'
+                dir("service") {
+                  sh 'echo "code quality check stage"'
+                }
             }
         }
         stage('Package') {
             steps {
                 sh 'echo "preparing package..."'
+                dir("service") {
+                  sh 'docker save -o 100jokes-service.tar 100jokes-service:latest'
+                }
             }
         }
         stage('Deploy') {
             when {
               expression {
-                env.BRANCH_NAME == master
+                env.BRANCH_NAME == 'master'
                 currentBuild.result == null || currentBuild.result == 'SUCCESS'
               }
             }
             steps {
-                input(id: "Run service", message: "Deploy ${env.SVC}?", ok: 'Deploy')
-                sh 'docker-compose up -d'
+                input(id: "Run service", message: "Deploy the service?", ok: 'Deploy')
+                dir("service") {
+                  sh 'docker-compose up -d'
+                }
             }
         }
 
     }
+    
     post {
         always {
-             node('master')
-                 lastChanges()
+            archiveArtifacts artifacts: 'service/*.tar', fingerprint: true
         }
     }
 }
