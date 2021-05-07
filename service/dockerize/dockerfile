@@ -1,0 +1,12 @@
+FROM ubuntu:20.04
+LABEL maintainer="Robert Piecyk robert_piecyk@outlook.com"
+RUN apt-get update -y && \
+    apt-get install -y python3-pip python3-dev curl
+COPY dockerize/apps/requirements.txt /app/requirements.txt
+WORKDIR /app
+RUN pip3 install -r requirements.txt
+COPY dockerize/apps/100jokes-service.py /app/100jokes-service.py
+EXPOSE 5000
+HEALTHCHECK --interval=5s --timeout=3s CMD curl --fail http://localhost:5000/health || exit 1
+ENTRYPOINT [ "python3" ]
+CMD [ "100jokes-service.py" ]
