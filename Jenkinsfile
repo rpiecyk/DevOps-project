@@ -3,15 +3,15 @@ pipeline {
 
     environment {
         SVC = 'pl.org.bash.100jokes'
-        CODE_DIR = 'service'
     }
 
     stages {
         stage('Build') {
             steps {
                 sh 'echo "Building image..."'
-                sh 'echo ${env.CODE_DIR}'
                 dir("service") {
+                  echo 'it is service dir'
+                  sh 'pwd'
                   sh 'docker-compose up -d'
                   sh 'docker-compose down'
                 }
