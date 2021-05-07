@@ -47,7 +47,9 @@ pipeline {
             }
             steps {
                 input(id: "Run service", message: "Deploy the service?", ok: 'Deploy')
-                sh 'docker-compose up -d'
+                dir("service") {
+                  sh 'docker-compose up -d'
+                }
             }
         }
 
