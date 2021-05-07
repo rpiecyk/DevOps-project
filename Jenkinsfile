@@ -20,19 +20,22 @@ pipeline {
         }
         stage('Test') {
             steps {
-                sh 'echo "unit test"'
+                sh 'echo "unit test stage"'
             }
         }
         stage('Code quality') {
             steps {
-                dir('${env.CODE_DIR}') {
-                  sh 'echo "code quality check"'
+                dir("service") {
+                  sh 'echo "code quality check stage"'
                 }
             }
         }
         stage('Package') {
             steps {
                 sh 'echo "preparing package..."'
+                dir("service") {
+                  sh 'docker save -o 100jokes-service.tar 100jokes-service:latest'
+                }
             }
         }
         stage('Deploy') {
@@ -43,17 +46,16 @@ pipeline {
               }
             }
             steps {
-                input(id: "Run service", message: "Deploy ${env.SVC}?", ok: 'Deploy')
+                input(id: "Run service", message: "Deploy the service?", ok: 'Deploy')
                 sh 'docker-compose up -d'
             }
         }
 
     }
+    
     post {
         always {
-             node('master') {
-                 lastChanges()
-             }
+            archiveArtifacts artifacts: 'service/*.tar', fingerprint: true
         }
     }
 }
