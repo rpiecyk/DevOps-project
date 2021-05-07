@@ -37,7 +37,7 @@ If time allows for that, it will be fixed soon.
 ## Serivce run on Jenkins 
 
 The service which is build by Jenkins is working - it is capable of printing 100 latest jokes from bash.org.pl site.
-Unfortunatelly, due to time constrains and lack of expirience in working with Jenkins, as of now pipeline is not fully prepared and it may fail.
+After successful build, it will be available at the same address as Jenkins server, but on port 8090.
 
 #####TODO:
 - prepare unit test for the 100-jokes-service,
