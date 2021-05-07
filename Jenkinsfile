@@ -11,7 +11,7 @@ pipeline {
             steps {
                 sh 'echo "Building image..."'
                 sh 'echo "${env.CODE_DIR}"'
-                dir(${env.CODE_DIR}) {
+                dir("${env.CODE_DIR}") {
                   sh 'docker-compose up -d'
                   sh 'docker-compose down'
                 }
