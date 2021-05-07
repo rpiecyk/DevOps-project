@@ -8,11 +8,9 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'ls -alh'
-                sh 'cd service'
                 sh 'echo "Building image..."'
-                sh 'docker-compose up -d'
-                sh 'docker-compose down'
+                sh 'cd service && docker-compose up -d'
+                sh 'ls -alh && docker-compose down'
                 sh 'echo "Image built"'
             }
         }
@@ -47,8 +45,9 @@ pipeline {
     }
     post {
         always {
-             node('master')
+             node('master') {
                  lastChanges()
+             }
         }
     }
 }
