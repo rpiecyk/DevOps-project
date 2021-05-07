@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  jenkins: 
+    build: 
+      context: .
+    ports: 
+      - ${HOST_WWW}:8080
+      - ${HOST_JNLP}:50000
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - ./configs:/var/jenkins
+      - ${HOST_DOCKER}:/var/run/docker.sock
+    secrets:
+      - admin_pass
+    environment:
+      - CASC_JENKINS_CONFIG=/var/jenkins/jenkins.yaml
+secrets:
+  admin_pass:
+    file: ./secret/admin
+volumes:
+  jenkins_home:

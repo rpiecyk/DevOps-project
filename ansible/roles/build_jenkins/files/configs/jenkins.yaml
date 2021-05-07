@@ -1,0 +1,63 @@
+jenkins:
+  systemMessage: "\n\nHi scalac!\n\n"
+
+  numExecutors: 1
+  mode: NORMAL
+  scmCheckoutRetryCount: 3
+
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+        - id: admin
+          password: ${admin_pass:-scalac_pass}
+
+  authorizationStrategy:
+    globalMatrix:
+      permissions:
+        - "Overall/Read:authenticated"
+        - "Overall/Administer:admin"
+
+  remotingSecurity:
+    enabled: true    
+
+  crumbIssuer: "standard"
+
+# generates error - gotta live w/ warning in UI
+#security:
+#  queueItemAuthenticator:
+#    authenticators:
+#      - global:
+#          strategy: triggeringUsersAuthorizationStrategy
+
+# Public repo - no need for creds
+#credentials:
+#  system:
+#    domainCredentials:
+#      - credentials:
+#        - basicSSHUserPrivateKey:
+#            scope:    SYSTEM
+#            id:       github-key
+#            username: fill_me
+#            passphrase: ""
+#            description: github ssh key
+#            privateKeySource:
+#              directEntry:
+#                privateKey: "${configs/ssh-key:-path_to_key}"
+
+tool:
+  git:
+    installations:
+      - name: Default
+        home: "git"
+
+jobs:
+  - script: >
+      multibranchPipelineJob('100jokes-svc') {
+          branchSources {
+              git {
+                  id = '100-jokes'
+                  remote('https://github.com/rpiecyk/bash-org-pl-100-jokes.git')
+              }
+          }
+      }

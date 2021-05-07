@@ -1,0 +1,15 @@
+---
+
+- hosts: all
+  become: yes
+  become_user: root
+
+  pre_tasks:
+    - name: update and upgrade apt pkgs
+      apt: 
+        update_cache: yes
+        upgrade: yes
+  
+  roles:
+    - install_docker-compose
+    - build_jenkins

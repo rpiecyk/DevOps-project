@@ -1,0 +1,42 @@
+---
+  - name: Copy docker-compose main files
+    copy:
+      src: "{{ item }}"
+      dest: /home/ubuntu/jenkins/
+      owner: ubuntu
+      group: ubuntu
+    loop:
+      - Dockerfile
+      - docker-compose.yaml
+      - .env
+
+  - name: Copy jenkins config files
+    copy:
+      src: "{{ item }}"
+      dest: /home/ubuntu/jenkins/configs/      
+      owner: ubuntu
+      group: ubuntu
+    loop:
+      - configs/jenkins.yaml
+      - configs/plugins_extra.txt
+
+  - name: copy docker secret
+    copy:
+      src: secret/admin
+      dest: /home/ubuntu/jenkins/secret/
+      owner: ubuntu
+      group: ubuntu
+
+
+  - name: Add default user to docker group
+    user:
+      name: ubuntu
+      groups: docker    
+      append: yes
+
+
+  - name: Run docker-compose
+    command:
+      chdir: /home/ubuntu/jenkins
+      cmd: docker-compose up -d
+
