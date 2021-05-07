@@ -57,7 +57,7 @@ jobs:
           branchSources {
               git {
                   id = '100-jokes'
-                  remote('https://github.com/rpiecyk/bash-org-pl-100-jokes.git')
+                  remote('https://github.com/rpiecyk/DevOps-project.git')
               }
           }
       }
