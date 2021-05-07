@@ -41,7 +41,7 @@ pipeline {
         stage('Deploy') {
             when {
               expression {
-                env.BRANCH_NAME == master
+                env.BRANCH_NAME == 'master'
                 currentBuild.result == null || currentBuild.result == 'SUCCESS'
               }
             }
